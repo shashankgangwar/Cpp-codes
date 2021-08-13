@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+vector<vector<int> > preProcess(vector<int>& A){
+	int n=A.size();
+	int x=log2(n);
+	vector<vector<int> > table(1+x,vector<int>(n));
+	
+	for(int i=0;i<n;i++){
+		table[ 0 ][ i ]=A[ i ]; 
+	}       
+
+ 	for(int j=1;j<=log(n);j++){
+ 		for(int i=0;i+(1<<(j-1))<n;i++){       
+     		table[ j ][ i ] = min ( table[ j-1 ][ i ], table[ j-1 ][ i+(1<<(j-1)) ] );
+		}
+	}
+	return table;
+}
+
+int solve(vector<vector<int> >& table, int x, int y){
+	int len=y-x+1;
+    int k=log2(len);
+    return min(table[ k ][ x ],table[ k ][ y+1-(1<<k) ]);
+}
+
+int main(){
+	int n;  //size of array;
+	cin>>n;
+	vector<int> A(n);  //array
+	for(int i=0;i<n;i++){
+			cin>>A[i];
+	}
+	vector<vector<int> > table=preProcess(A);
+	int q; //no. of queries
+	cin>>q;
+	vector<int> v(q);
+	for(int i=0;i<q;i++){
+		int x1,y1,x2,y2;
+		cin>>x1>>x2;
+		int ans=solve(table,x1,x2);
+		v[q]=ans;
+	}
+	return 0;
+}
