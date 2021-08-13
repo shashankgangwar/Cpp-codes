@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+vector<vector<vector<vector<int> > > > preProcess(vector<vector<int> >& A){
+	int n=A.size();
+	int m=A[0].size();
+	int x=log2(n);
+	int y=log2(m);
+	vector<vector<vector<vector<int> > > > table(1+x,vector<vector<vector<int> > >(n,vector<vector<int> > ( 1+y,vector<int>(m))));
+	for(int ir=0;ir<n;ir++)
+	{
+	    for(int ic=0;ic<m;ic++)
+	    	table[ 0 ][ ir ][ 0 ][ ic ] = A[ ir ][ ic ];
+	       
+	    for(int jc=1;jc<=log2(m);jc++){
+	  		for(int ic=0;ic+(1<<(jc-1))<m;ic++){
+	    		table[0 ][ir ][jc ][ic ] = min(table[0 ][ir ][jc-1 ][ic ],table[0 ][ir ][ jc-1 ][ ic+(1<<(jc-1)) ]);
+	    	}
+		}
+	}        
+	
+	for(int jr=1;jr<=log2(n);jr++){
+		for(int ir=0;ir+(1<<(jr-1))<n;ir++){
+			for(int jc=0;jc<=log2(m);jc++){
+				for(int ic=0;ic<m;ic++){
+					table[jr ][ir ][jc ][ic ] = min(table[jr-1 ][ir ][jc ][ic ],table[jr-1 ][ir+(1<<(jr-1)) ][jc ][ic ]);
+				}
+			}
+		}
+	}
+	return table;
+}
+
+int solve(vector<vector<vector<vector<int> > > >& table, int x1, int y1, int x2, int y2){
+	int lenx=x2-x1+1;
+    int kx=log2(lenx);
+    int leny=y2-y1+1;
+    int ky=log2(leny);
+    int min_R1 = min ( table[kx ][x1 ][ky ][y1 ] , table[kx ][x1 ][ky ][ y2+1-(1<<ky) ] );
+    int min_R2 = min ( table[kx ][x2+1-(1<<kx) ][ky ][y1 ], table[kx ][x2+1-(1<<kx) ][ky ][y2+1-(1<<ky) ] );
+    return min ( min_R1, min_R2 );
+}
+
+int main(){
+	int n,m;  //size of array;
+	cin>>n>>m;
+	vector<vector<int> > A(n,vector<int>(m));  //array
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cin>>A[i][j];
+		}
+	}
+	vector<vector<vector<vector<int> > > > table=preProcess(A);
+	int q; //no. of queries
+	cin>>q;
+	vector<int> v(q);
+	for(int i=0;i<q;i++){
+		int x1,y1,x2,y2;
+		cin>>x1>>y1>>x2>>y2;
+		int ans=solve(table,x1,y1,x2,y2);
+		v[q]=ans;
+	}
+	return 0;
+}
