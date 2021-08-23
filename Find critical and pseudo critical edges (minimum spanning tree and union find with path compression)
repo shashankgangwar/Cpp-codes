@@ -1,0 +1,64 @@
+//         We use the standard MST algorithm as a baseline, and denote the total MST weight as origin_mst.
+// To generate critical and pseudo-critical lists, we enumerate each edge:
+
+// 1. If deleting the edge and re-calculating the mst again makes mst total weight increase (or can't form mst), then the edge goes into critical list.
+// 2. If we force adding the edge to the mst (by first adding the edge to the mst edge set and run the standard MST algorithm with giving priority to this edge ), and find that the mst doesn't change, then the edge goes into pseudo-critical list.
+
+
+// n is the number of nodes, A is the edgelist with weights.
+
+//Leetcode 1489
+
+bool comp(vector<int>& a, vector<int>& b){
+    if(a[2]<b[2]) return true;
+    return false;
+}
+
+class Solution {
+public:
+    vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& A) {
+        int m=A.size();
+        for(int i=0;i<m;i++) A[i].push_back(i);
+        sort(A.begin(),A.end(),comp);
+        //return A;
+        int orig_w= get_w(n,A,-1,-1);
+        vector<int> crit,ps_crit;
+        
+        for(int i=0;i<A.size();i++){
+            if(orig_w<get_w(n,A,i,-1)) crit.push_back(A[i][3]);
+            else if(orig_w==get_w(n,A,-1,i)) ps_crit.push_back(A[i][3]);
+        }
+        return {crit,ps_crit};
+    }
+    int get_w(int n, vector<vector<int>>& A, int block, int pre){
+        vector<int> un(n);
+        for(int i=0;i<n;i++) un[i]=i;
+        int weight=0;
+        if(pre!=-1){
+            int x=find(A[pre][0],un);
+            int y=find(A[pre][1],un);
+            weight+=A[pre][2];
+            un[x]=y;
+        }
+        for(int i=0;i<A.size();i++){
+            if(i==block) continue;
+            int a=find(A[i][0],un);
+            int b=find(A[i][1],un);
+            if(a==b) continue;
+            else {
+                weight+=A[i][2];
+                un[a]=b;
+            }
+        }
+        for(int i=1;i<n;i++){
+            if(find(i,un)!=find(i-1,un)) return INT_MAX;
+        }
+        return weight;
+    }
+    int find(int a, vector<int>& par){
+        if(par[a]==a) return a;
+        int x=find(par[a],par);
+        par[a]=x;
+        return x;
+    }
+};
