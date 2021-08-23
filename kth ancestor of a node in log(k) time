@@ -1,0 +1,52 @@
+//Parent array gives the parent of ith node
+//we have to find the kth ancestor of node in log(k) time;
+//first we made the sparse table LCA and then found the ancestor
+//LeetCode: 1483
+
+
+class TreeAncestor {
+public:
+    vector<vector<int> > LCA;
+    TreeAncestor(int n, vector<int> parent) {
+        
+        int m=log2(n);
+        LCA.resize(n, vector<int>(m+1, -1));
+        for(int i=0;i<parent.size();i++){
+            LCA[i][0]=parent[i];
+        } 
+        for(int j=1;j<=m;j++){
+            for(int i=0;i<n;i++){
+                if(LCA[i][j-1]!=-1){
+                    int par=LCA[i][j-1];
+                    LCA[i][j]=LCA[par][j-1];
+                }
+            }
+        }
+    }
+    
+    int getKthAncestor(int node, int k) {
+    	
+//    	for(int i = 0; i <= m; i++){
+//            if(k & (1 << i)){
+//                node = LCA[node][i];
+//                if(node == -1) return -1;
+//            }
+//        }
+//    	return node;
+
+        while(k>0 && node!=-1 && node!=0){
+        	  int i=log2(k);
+            node=LCA[node][i];
+            k=k-(1<<i); 
+        }
+        if(k==0) return node;
+        if(node==-1 || node==0) return -1;
+        while(k!=0 && node!=0){
+            node=LCA[node][0];
+            k--;
+        }
+        
+        if(k==0) return node; 
+        return -1;
+    }
+};
