@@ -1,0 +1,41 @@
+//unordered_map
+
+class Solution {
+public:
+    int longestAwesome(string s) {
+        unordered_map<int,int> mp;
+        int mask=0,ans=0;
+        
+        for(int i=0;i<s.size();i++){
+            
+            mask=mask^(1<<(s[i]-'0'));
+            
+            int sb=0;
+            for(int i=0;i<10;i++){
+                if(mask&(1<<i)) sb++;
+            }
+            if(sb<=1) ans=max(ans,i+1);
+            
+            else{
+                int left=i;
+                if(mp.find(mask)!=mp.end()) left=mp[mask];
+                for(int i=0;i<10;i++){
+                    if(mask&(1<<i)){
+                        mask=mask&(~(1<<i));
+                        if(mp.find(mask)!=mp.end()) left=min(mp[mask],left);
+                        mask=mask|(1<<i);
+                    }
+                    else{
+                        mask=mask | (1<<i);
+                        if(mp.find(mask)!=mp.end()) left=min(mp[mask],left);
+                        mask=mask&(~(1<<i));
+                    } 
+                }
+                ans=max(ans,i-left);
+            }
+            
+            if(mp.find(mask)==mp.end()) mp[mask]=i;
+        }
+        return ans;
+    }
+};
