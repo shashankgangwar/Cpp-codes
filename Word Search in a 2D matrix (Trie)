@@ -1,0 +1,61 @@
+class TrieNode{
+    public:
+    vector<TrieNode*> children;
+    bool is_end;
+    TrieNode(){
+        is_end=false;
+        children=vector<TrieNode*>(26,NULL);
+    }
+};
+
+TrieNode* addString(vector<string>& A){
+    TrieNode* root=new TrieNode();
+    for(int j=0;j<A.size();j++){
+        string s=A[j];
+        TrieNode* curr;
+        curr=root;
+        for(int i=0;i<s.size();i++){
+            int idx=s[i]-'a';
+            if(curr->children[s[i]-'a']==NULL){
+                curr->children[s[i]-'a']= new TrieNode();
+            }
+            curr=curr->children[s[i]-'a'];
+        }
+        curr->is_end=true;
+    }   
+    return root;
+}
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char> >& A,vector<string>& words) {
+        TrieNode* root= addString(words);
+        int m=A.size();
+        int n=A[0].size();
+        set<string> results;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                string word;
+                dfs(A,i,j,word,root,results);
+            }
+        }
+        
+        vector<string> ans;
+        for(auto it : results){
+            ans.push_back(it);
+        }
+        return ans;
+    }
+    void dfs(vector<vector<char>>& A, int i, int j, string& word, TrieNode* root, set<string>& results){
+        if(i>=A.size() || i<0 || j>=A[0].size() || j<0 || A[i][j]==' ' || root->children[A[i][j]-'a']==NULL) return;
+        word.push_back(A[i][j]);
+        root=root->children[A[i][j]-'a'];
+        if(root->is_end==true) results.insert(word);
+        A[i][j]=' ';
+        dfs(A,i+1,j,word,root,results);
+        dfs(A,i,j+1,word,root,results);
+        dfs(A,i-1,j,word,root,results);
+        dfs(A,i,j-1,word,root,results);
+        A[i][j]=word.back();
+        word.pop_back();
+    }
+};
