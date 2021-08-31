@@ -1,0 +1,45 @@
+    vector<int> countSmaller(vector<int>& A) {
+        vector<pair<int,int> > v;
+        int n=A.size();
+        vector<int> ans(n);
+        for(int i=0;i<n;i++){
+            v.push_back({A[i],i});
+        }
+        merge(ans,v,0,n-1);
+        return ans;
+    }
+    void merge(vector<int>& ans, vector<pair<int,int> >& A, int i, int j){
+        if(i>=j) return;
+        int m=(i+j)/2;
+        merge(ans, A,i,m);
+        merge(ans,A,m+1,j);
+        vector<pair<int,int> > merged;
+        int i1=i,i2=m+1,j1=m,j2=j;
+        int k1=i1,k2=i2;
+        int elmnt_shftd=0;
+        while(k2<=j2 && k1<=j1){
+            if(A[k2].first<A[k1].first){
+                merged.push_back(A[k2]);
+                elmnt_shftd++;
+                k2++;
+            }
+            else{
+                ans[A[k1].second]+=elmnt_shftd;
+                merged.push_back(A[k1]);
+                k1++;
+            }
+        }
+        while(k1<=j1){
+            ans[A[k1].second]+=elmnt_shftd;
+            merged.push_back(A[k1]);
+            k1++;
+        }
+        while(k2<=j2){
+            merged.push_back(A[k2]);
+            k2++;
+        }
+        for(int k=0;k<merged.size();k++){
+            A[i1]=merged[k];
+            i1++;
+        }
+    }
