@@ -110,6 +110,7 @@ int MinHeap::extractMin()
 // infinite, then calls extractMin()
 void MinHeap::deleteKey(int i)
 {
+	if(i>=heap_size || harr[i]==0) return;
 	decreaseKey(i, INT_MIN);
 	extractMin();
 }
