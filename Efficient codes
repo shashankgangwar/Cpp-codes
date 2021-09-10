@@ -1,11 +1,55 @@
 
-1. [Two sorted arrays merge them in constant time](https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/)
+**1. Two sorted arrays merge them in constant time:**
+https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
 
-2.[Two sorted arrays find their median in O(min(log(n),log(m)))](https://www.geeksforgeeks.org/median-of-two-sorted-arrays-of-different-sizes/)
+**2. Two sorted arrays find their median in O(min(log(n),log(m))):**
+https://www.geeksforgeeks.org/median-of-two-sorted-arrays-of-different-sizes/
 
-Two sorted arrays of (either both of even size or both of odd size) find the sum of middle two elements after merging:
+**3. Two sorted arrays of (either both of even size or both of odd size) find the sum of middle two elements after merging:**
 same as finding median of two sorted arrays: https://practice.geeksforgeeks.org/problems/sum-of-middle-elements-of-two-sorted-arrays2305/1
 
-
-
+**4. Find Kth element after merging two sorted arrays of different sizes in O(logn + logm):**
 https://www.geeksforgeeks.org/k-th-element-two-sorted-arrays/
+
+
+**5. Find the element in rotated sorted array:**
+  int search(int A[], int l, int h, int k){
+    //complete the function here
+        int s=l,e=h;
+        int ls=0,rs=0;
+        if(A[0]==k) return l;
+        if(A[h]==k) return h;
+        if(A[0]<k) ls=1;
+        else if(A[h]>k) rs=1;
+        else return -1;
+        while(l<=h){
+            int m=(l+h)/2;
+            int lsm=0,rsm=0;
+            if(A[m]==k) return m;
+            
+            
+            if(A[m]<=A[e] && A[m]<A[s]) rsm=1;
+            else lsm=1;
+            
+            if(ls==1 && lsm==1){
+                if(A[m]>k) h=m-1;
+                else if(A[m]<k) l=m+1;
+            }
+            else if(rs==1 && rsm==1){
+                if(A[m]>k) h=m-1;
+                else if(A[m]<k) l=m+1;
+            }
+            else if(ls==1 && rsm==1){
+                h=m-1;
+            }
+            else if(rs==1 && lsm==1){
+                l=m+1;
+            }
+        }
+        return -1;
+    }
+
+
+
+
+
