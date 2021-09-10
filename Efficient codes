@@ -1,3 +1,11 @@
-https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
+
+1. [Two sorted arrays merge them in constant time](https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/)
+
+2.[Two sorted arrays find their median in O(min(log(n),log(m)))](https://www.geeksforgeeks.org/median-of-two-sorted-arrays-of-different-sizes/)
+
+Two sorted arrays of (either both of even size or both of odd size) find the sum of middle two elements after merging:
+same as finding median of two sorted arrays: https://practice.geeksforgeeks.org/problems/sum-of-middle-elements-of-two-sorted-arrays2305/1
+
+
 
 https://www.geeksforgeeks.org/k-th-element-two-sorted-arrays/
