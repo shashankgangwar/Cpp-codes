@@ -1,0 +1,36 @@
+Problem and explaination: https://www.geeksforgeeks.org/find-maximum-subset-xor-given-set/
+
+Code:
+
+int maxSubarrayXOR(int arr[], int N)
+    {
+        //Your code here
+        int index=0;
+        for(int i=31;i>=0;i--){
+            
+            int max_el=INT_MIN,max_idx=index;
+            
+            for(int j=index;j<N;j++){
+                if(arr[j]&(1<<i)){
+                    if(max_el<arr[j]){
+                        max_el=arr[j];
+                        max_idx=j;
+                    }
+                }
+            }
+            if(max_el==INT_MIN) continue;
+            swap(arr[index],arr[max_idx]);
+            
+            for(int j=0;j<N;j++){
+                if(j!=index && arr[j]&(1<<i)){
+                    arr[j]=arr[j]^max_el;
+                }
+            }
+            index++;
+        }
+        int res=0;
+        for(int i=0;i<N;i++){
+            res^=arr[i];
+        }
+        return res;
+    }
