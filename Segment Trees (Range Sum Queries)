@@ -1,0 +1,70 @@
+Link: https://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/
+
+//whereever pos is written it denote the index on segment tree
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int getSum(int *st, int i, int j, int qs, int qe, int pos)
+{
+	if (qs <= i && qe >= j)
+		return st[pos];
+
+	if (j < qs || i > qe)
+		return 0;
+
+	int mid = (i+j)/2;
+	return getSum(st, i, mid, qs, qe, 2*pos+1) +
+		getSum(st, mid+1, j, qs, qe, 2*pos+2);
+}
+
+
+void update(int *st, int i, int j, int at_pos, int diff, int pos)
+{
+	if (at_pos < i || at_pos > j)
+		return;
+
+	st[pos] = st[pos] + diff;
+	if (i != j)
+	{
+		int mid = (i+j)/2;
+		update(st, i, mid, at_pos, diff, 2*pos + 1);
+		update(st, mid+1, j, at_pos, diff, 2*pos + 2);
+	}
+}
+
+
+int build(int arr[], int i, int j, int *st, int pos)
+{
+	if (i == j)
+	{
+		st[pos] = arr[i];
+		return st[pos];;
+	}
+
+	int mid = (i+j)/2;
+	st[pos] = build(arr, i, mid, st, pos*2+1) + build(arr, mid+1, j, st, pos*2+2);
+	return st[pos];
+}
+
+int main()
+{
+	int arr[] = {1, 3, 5, 7, 9, 11};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	
+	int x = (int)(ceil(log2(n)));
+	int max_size = 2*(int)pow(2, x) - 1;
+	int *st = new int[max_size];
+	build(arr, 0, n-1, st, 0);
+
+
+	cout<<"Sum of values in given range = "<<getSum(st, 0, n-1, 1, 3, 0)<<endl;
+	
+	int new_val=10, at_pos=1;
+	int diff=new_val-arr[at_pos];
+	update(st, 0, n-1, at_pos, diff, 0);
+	
+	cout<<"Updated sum of values in given range = "<<getSum(st,0, n-1, 1, 3, 0)<<endl;
+	
+	return 0;
+}
