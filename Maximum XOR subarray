@@ -1,0 +1,72 @@
+Link: https://www.geeksforgeeks.org/find-the-maximum-subarray-xor-in-a-given-array/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+struct TrieNode{
+	TrieNode* left;
+	TrieNode* right;
+	TrieNode(){
+		left=NULL;
+		right=NULL;
+	}
+};
+
+void insert(TrieNode* root, int n){
+	TrieNode* temp=root;
+	for(int i=31;i>=0;i--){
+		if(n&(1<<i)){
+			if(temp->right==NULL) temp->right= new TrieNode();
+			temp=temp->right;
+		}
+		else{
+			if(temp->left==NULL) temp->left= new TrieNode();
+			temp=temp->left;
+		}
+	}
+}
+
+int query(int n, TrieNode* root){
+	TrieNode* temp=root;
+	int ans=0;
+	for(int i=31;i>=0;i--){
+		if(n&(1<<i)){
+			if(temp->left!=NULL){
+				ans=ans | (1<<i);
+				temp=temp->left;
+			}
+			else{
+				temp=temp->right;
+			}
+		}
+		else{
+			if(temp->right!=NULL){
+				ans=ans | (1<<i);
+				temp=temp->right;
+			}
+			else{
+				temp=temp->left;
+			}
+		}
+	}
+	return ans;
+}
+int main(){
+	int n;
+	cin>>n;
+	vector<int> A(n);
+	for(int i=0;i<n;i++){
+		cin>>A[i];
+	}
+	int pre_xor=0;
+	TrieNode* root= new TrieNode();
+	insert(root,0);
+	int ans=0;
+	for(int i=0;i<n;i++){
+		pre_xor=pre_xor^(A[i]);
+		ans=max(ans,query(pre_xor,root));
+		insert(root,pre_xor);
+	}
+	cout<<"ans= "<<ans<<endl;
+	return 0;
+}
