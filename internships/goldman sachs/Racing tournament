@@ -1,0 +1,163 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	int n;
+	cin>>n;
+	vector<int> tr(n),c(n),o(n);
+	for(int i=0;i<n;i++) cin>>tr[i];
+	for(int i=0;i<n;i++) cin>>c[i];
+	for(int i=0;i<n;i++) cin>>o[i];
+	
+	vector<vector<int> > A(n,vector<int>(3,0));
+	for(int i=0;i<n;i++){
+		A[tr[i]-1][0]=i;
+	}
+	for(int i=0;i<n;i++){
+		A[c[i]-1][1]=i;
+	}
+	for(int i=0;i<n;i++){
+		A[o[i]-1][2]=i;
+	}
+	
+	vector<int> p(n,0),t(3,0);
+	
+	for(int i=0;i<n-1;i++){
+		int p1=i;
+		for(int j=i+1;j<n;j++){
+			int p2=j;
+			
+			int rtp1=A[i][0];
+			int rtp2=A[j][0];
+			int rcp1=A[i][1];
+			int rcp2=A[j][1];
+			int rop1=A[i][2];
+			int rop2=A[j][2];
+			
+			int rtw=min(rtp1,rtp2);
+			int rcw=min(rcp1,rcp2);
+			int row=min(rop1,rop2);
+			
+			if(rtw!=rcw && rcw!=row && rtw!=row){
+				if(min(rtw,min(rcw,row))==rtw){
+					t[0]++;
+					if(rtw==rtp1) p[i]++;
+					else p[j]++;
+				}
+				else if(min(rtw,min(rcw,row))==rcw){
+					t[1]++;
+					if(rcw==rcp1) p[i]++;
+					else p[j]++;
+				}
+				else{
+					t[2]++;
+					if(row==rop1) p[i]++;
+					else p[j]++;
+				}
+			}
+			else{
+				int rtl=max(rtp1,rtp2);
+				int rcl=max(rcp1,rcp2);
+				int rol=max(rop1,rop2);
+				if(rtw==rcw && rcw==row){
+					if(rtl!=rcl && rcl!=rol && rtl!=rol){
+						if(min(rtl,min(rcl,rol))==rtl){
+							t[0]++;
+							if(rtw==rtp1) p[i]++;
+							else p[j]++;
+						}
+						else if(min(rtl,min(rcl,rol))==rcl){
+							t[1]++;
+							if(rcw==rcp1) p[i]++;
+							else p[j]++;
+						}
+						else{
+							t[2]++;
+							if(row==rop1) p[i]++;
+							else p[j]++;
+						}
+					}
+					else{
+						if(rtl==rcl && rcl==rol){
+							t[0]++;
+							if(rtw==rtp1) p[i]++;
+							else p[j]++;
+						}
+						else if(rtl==rcl || rtl==rol){
+							t[0]++;
+							if(rtw==rtp1) p[i]++;
+							else p[j]++;
+						}
+						else{
+							t[1]++;
+							if(rcw==rcp1) p[i]++;
+							else p[j]++;
+						}
+					}
+				}
+				else if(rtw==rcw){
+					if(min(rtw,min(row,rcw))!=rtw){
+						t[2]++;
+						if(row==rop1) p[i]++;
+						else p[j]++;
+					}
+					else{
+						if(rtl<=rcl){
+							t[0]++;
+							if(rtw==rtp1) p[i]++;
+							else p[j]++;
+						}
+						else{
+							t[1]++;
+							if(rcw==rcp1) p[i]++;
+							else p[j]++;
+						}
+					}
+				}
+				else if(rcw==row){
+					if(min(rtw,min(row,rcw))!=rcw){
+						t[0]++;
+						if(rtw==rtp1) p[i]++;
+						else p[j]++;
+					}
+					else{
+						if(rcl<=rol){
+							t[1]++;
+							if(rcw==rcp1) p[i]++;
+							else p[j]++;
+						}
+						else{
+							t[2]++;
+							if(row==rop1) p[i]++;
+							else p[j]++;
+						}
+					}	
+				}
+				else if(rtw==row){
+					if(min(rtw,min(row,rcw))!=row){
+						t[1]++;
+						if(rcw==rcp1) p[i]++;
+						else p[j]++;
+					}
+					else{
+						if(rtl<=rol){
+							t[0]++;
+							if(rtw==rtp1) p[i]++;
+							else p[j]++;
+						}
+						else{
+							t[2]++;
+							if(row==rop1) p[i]++;
+							else p[j]++;
+						}
+					}
+				}
+			}
+		}
+	}
+	for(int i=0;i<3;i++) cout<<t[i]<<" ";
+	cout<<endl;
+	for(int i=0;i<n;i++) cout<<p[i]<<" ";
+	cout<<endl;
+	
+}
