@@ -1,0 +1,39 @@
+#define ll long long int
+ll c=1000000007;
+
+ll power(ll a, ll g) {
+    ll ag = 1; 
+    while(g){
+        if(g&1) ag = (ag%c * a%c)%c; 
+        a = (a%c * a%c)%c; 
+        g >>= 1;
+        
+    } 
+    return ag;
+}
+
+ll p[100005]; //stores the product of divisors of every number
+
+void pre_compute_product_of_divisors() {
+    p[0] = 0; 
+    p[1] = 1;
+    if(p[2] != 0) return;
+    for(ll i = 2; i < 100005; i ++) {
+        if(p[i] == 0) {
+            p[i] = 2;
+            for(ll j=i+i; j < 100005; j+=i) {
+                if(p[j] == 0) p[j] = 1;
+                ll tmp = j;
+                ll cnt = 0;
+                while(tmp % i == 0) {
+                    cnt += 1;
+                    tmp /= i;
+                }
+                p[j] = p[j]*(cnt + 1);
+            }
+        }
+    }
+    for(ll i = 2; i < 100005; i += 1) {
+        p[i] = (power(i, p[i]/2)%c * (p[i]%2==1 ? (ll)sqrt(i) : 1)%c)%c;
+    }
+}
