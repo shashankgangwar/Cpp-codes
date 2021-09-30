@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int helper(int x, int y, int z, int curr, int speed){
+	if(z-curr<=x || y==0){
+		int ans= z%speed==0?z/speed : z/speed+1;
+		return ans;
+	}
+	int to_get=z-curr;
+	int t1=to_get%speed==0? to_get/speed : to_get/speed +1;
+	int t2=(x-curr)%speed==0? (x-curr)/speed : (x-curr)/speed +1;
+	 curr=t2*speed+curr-x;
+	int new_s=speed+y;
+	int t3=(z-curr)%new_s==0? (z-curr)/new_s : (z-curr)/new_s +1;
+	if(t1<t2+t3){
+		return t1;
+	}
+	else{
+		return t2+helper(x,y,z,curr,new_s);
+	}
+}
+
+int solve(int x, int y, int z){
+	return helper(x,y,z,0,2);
+}
+
+int main(){
+	int x,y,z;
+	cin>>x>>y>>z;
+	cout<<solve(x,y,z)<<endl;
+}
