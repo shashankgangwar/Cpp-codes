@@ -1,0 +1,27 @@
+
+int Solution::search(const vector<int> &A, int B) {
+    int n=A.size();
+    int i=0,j=n-1;
+    while(i<=j){
+        int m=i+(j-i)/2;
+        if(A[m]==B) return m;
+        else if(A[m]>A[n-1]){  //means m is on the left part which means left part of m is sorted
+        
+            // check if B lies in left part
+            if(B<A[m] && B>=A[0]) j=m-1;  //b lies on left part search there
+            
+            //else b does not lie in left part search in right part
+            else i=m+1;
+        }
+        else { //m lise in right part ans, array right to m is sorted
+        
+            //check if array lies in right part
+            if(B>A[m] && B<=A[n-1]) i=m+1; //b lies in right part search there
+            
+            //b do not lies in right part so search in left part
+            else j=m-1;
+            
+        }
+    }
+    return -1;
+}
