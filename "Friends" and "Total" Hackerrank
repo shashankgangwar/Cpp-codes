@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int find(int x, vector<int>& parent){
+      if (parent[x] != x) parent[x] = find(parent[x],parent);
+      return parent[x];
+}
+  
+vector<int> solve(int n, vector<string> q, vector<int> s1, vector<int> s2){
+	vector<int> parent(n+1);
+	vector<int> rank(n+1,1);
+	vector<int> ans;
+	for(int i=0;i<=n;i++){
+		parent[i]=i;
+	}
+	for(int i=0;i<q.size();i++){
+		if(q[i]=="Friend"){
+			int a=find(s1[i],parent);
+			int b=find(s2[i],parent);
+			parent[a]=b;
+			rank[b]+=rank[a];
+		}
+	}
+	for(int i=1;i<=n;i++){
+		int a=find(i,parent);
+		rank[i]=rank[a];
+	}
+	
+	for(int i=0;i<q.size();i++){
+		if(q[i]=="Total"){
+			int a=find(s1[i],parent);
+			int b=find(s2[i],parent);
+			if(a!=b) ans.push_back(rank[a]+rank[b]);
+			else ans.push_back(rank[a]);
+		}
+	}
+		
+	return ans;
+}
+
+int main(){
+	vector<int> ans= solve(5,{"Friend","Friend","Total"},{4,2,2},{1,4,3});
+	cout<<ans[0];
+}
