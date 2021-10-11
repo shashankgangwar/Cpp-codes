@@ -1,3 +1,10 @@
+>>Nodes are 1-indexed, graph is undirected and unweightted.
+
+Find a vector ans, such that: 
+>>ans[i] is 1 if (i+1)th node is an endpoint of any diameter of the tree.
+
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
