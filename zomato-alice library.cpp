@@ -1,3 +1,5 @@
+//link: https://code.hackerearth.com/practice/data-structures/stacks/basics-of-stacks/practice-problems/algorithm/katrina-and-library-c2ed51f3/
+
 #include<bits/stdc++.h>
 using namespace std;
 string solve(string& s){
