@@ -1,0 +1,42 @@
+//link: https://leetcode.com/problems/sum-of-distances-in-tree/
+
+/* 
+find an array sum where sum[i] gives the sum of distances from ith node to all other nodes.
+*/
+
+    vector<int> cnt,sum;
+    vector<vector<int>> A;
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& e) {
+        cnt=vector<int>(n);
+        sum=vector<int>(n);
+        A=vector<vector<int> >(n,vector<int>());
+        int m=e.size();
+        for(int i=0;i<m;i++){
+            A[e[i][0]].push_back(e[i][1]);
+            A[e[i][1]].push_back(e[i][0]);
+        }
+        dfs(0,-1);
+        dfs2(0,-1,n);
+        return sum;
+    }
+    int dfs(int i, int par){
+        for(int j : A[i]){
+            if(j!=par){
+                cnt[i]+=dfs(j,i);
+            }
+        }
+        sum[0]+=cnt[i];
+        cnt[i]++;
+        return cnt[i];
+    }
+    void dfs2(int i, int par, int n){
+        if(par!=-1){
+            sum[i]=sum[par]-cnt[i]+(cnt[par]-cnt[i]);
+            cnt[i]=n;
+        }
+        for(int j: A[i]){
+            if(j!=par){
+                dfs2(j,i,n);
+            }
+        }
+    }
