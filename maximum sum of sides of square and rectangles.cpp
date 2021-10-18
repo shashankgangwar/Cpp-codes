@@ -1,3 +1,13 @@
+/*
+
+Given an array A where A[[i] defines the size of ith stick and another array F where F[i] defines the number of ith sticks present. Make squares and rectangles using
+these sticks such that the sum of perimeter of all rectangles and squares formed is maximum. Return this maximum value.
+
+*/
+
+//Link: https://www.geeksforgeeks.org/maximum-of-sum-of-length-of-rectangles-and-squares-formed-by-given-sticks/
+
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long int
