@@ -1,3 +1,5 @@
+//find the number of substrings that have exactly 2 zeros in them.
+
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long int
