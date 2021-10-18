@@ -1,3 +1,6 @@
+//link: http://cplusplus.com/forum/beginner/247883/
+//solution posted on the above link is wrong.
+
 #include<bits/stdc++.h>
 using namespace std;
 
