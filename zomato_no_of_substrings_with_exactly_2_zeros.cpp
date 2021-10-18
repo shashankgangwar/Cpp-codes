@@ -18,7 +18,7 @@ int solve(string& s){
 	if(l.size()<=1) return 0;
 	vector<int> r(l.size());
 	int j=l.size()-1;
-	for(int i=n-18;i>=0;i--){
+	for(int i=n-1;i>=0;i--){
 		if(s[i]=='1'){
 			rz++;
 		}
