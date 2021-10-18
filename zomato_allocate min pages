@@ -1,0 +1,38 @@
+Link: https://www.interviewbit.com/problems/allocate-books/
+
+bool is_valid(vector<int>& A, int B, int m){
+    int n=A.size();
+    int x=0,k=1;
+    for(int i=0;i<n;i++){
+        if(A[i]>m) return false;
+        if(x+A[i]>m){
+            x=A[i];
+            k++;
+        }
+        else{
+            x+=A[i];
+        }
+        if(k>B) return false;
+    }
+    return true;
+}
+
+int books(vector<int> &A, int B) {
+    int n=A.size();
+    if(n<B) return -1;
+    int mini=0,maxi=0;
+    for(int i=0;i<n;i++){
+        maxi+=A[i];
+        mini=min(A[i],mini);
+    }
+    int i=mini,j=maxi,ans=INT_MAX;
+    while(i<=j){
+        int m=(i+j)/2;
+        if(is_valid(A,B,m)){
+            ans=min(ans,m);
+            j=m-1;
+        }
+        else i=m+1;
+    }
+    return ans;
+}
