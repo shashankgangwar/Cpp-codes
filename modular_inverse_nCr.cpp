@@ -1,3 +1,12 @@
+/*
+This is a method to calculate nCr of large numbers, when a lot of nCr values are to be calculated in question,
+it calculates nCr in O(1) time, and requires preprocessing of O(n) TC.
+
+if less values of nCr are needed to be calculated then we can go for direct calculations without preprocessing (second code)
+
+*/
+
+
 #include<iostream>
 using namespace std;
 #define ll long long int
@@ -24,9 +33,9 @@ void calc_inv(){
 	ll ans=1;
 	
 	for (int i = 2; i <= k; i++) {
-        ans = (ans*inv[i])%m;
-        inv[i]=ans;
-    }
+		ans = (ans*inv[i])%m;
+		inv[i]=ans;
+	}
 }
 
 ll nCr(int n, int r){
@@ -49,3 +58,43 @@ int main(){
 		cout<<n<<" "<<ans<<endl;
 	}
 }
+
+
+
+
+//if less values of nCr are needed to be calculated 
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+int binomialCoeff(int n, int k)
+{
+	int res = 1;
+	
+	if (k > n - k) k = n - k;
+
+	// Calculate value of
+	// [n * (n-1) *---* (n-k+1)] / [k * (k-1) *----* 1]
+	
+	for (int i = 0; i < k; ++i) {
+		res *= (n - i);
+		res /= (i + 1);
+	}
+
+	return res;
+}
+
+int main()
+{
+	int n = 8, k = 2;
+	cout << "Value of C(" << n << ", "
+		<< k << ") is " << binomialCoeff(n, k);
+	return 0;
+}
+
+
+
+
