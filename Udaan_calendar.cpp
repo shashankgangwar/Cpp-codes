@@ -1,3 +1,7 @@
+
+// solution 1; failed for two test cases
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -199,4 +203,349 @@ int main(){
 		else if(op[0]=='s' && op[1]=='u') suggest();
 	}
 	return 0;
+}
+
+
+// solution 2
+
+#include <bits/stdc++.h>
+
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+using namespace std;
+signed main()
+{
+    ios_base::sync_with_stdio(0),cin.tie(0);
+	srand(chrono::high_resolution_clock::now().time_since_epoch().count());
+    int n;
+    cin>>n;
+    set<string> users;
+    map<pair<string,string>,vector<int>> m;
+    while(n--)
+    {
+        string s;
+        getline(cin,s);
+        int x=s.length();
+        if(x==0)
+        {
+            n++;
+            continue;
+        }
+        if(s[0]=='a')
+        {
+            int c=0;
+            for(int i=0;i<x;i++)
+            {
+                if(s[i]=='r')
+                {
+                    c=i+2;
+                    break;
+                }
+            }
+            string t="";
+            for(int i=c;i<x;i++)
+            {
+                t+=s[i];
+            }
+            if(users.count(t))
+            {
+                cout<<"failure"<<endl;
+            }
+            else
+            {
+                users.insert(t);
+                cout<<"success"<<endl;
+            }
+        }
+        else if(s[0]=='c')
+        {
+            int c=0;
+            string date="";
+            for(int i=0;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                date+=s[i];
+            }
+            int l=0,r=0,num=0;
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                l=l*10+(ch-48);
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                r=r*10+(ch-48);
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                num=num*10+(ch-48);
+            }
+            set<string> u;
+            while(num--)
+            {
+                string t="";
+                for(int i=c;i<x;i++)
+                {
+                    if(s[i]==' ')
+                    {
+                        c=i+1;
+                        break;
+                    }
+                    t+=s[i];
+                }
+                u.insert(t);
+            }
+            if((l+r)>=1440)
+            {
+                cout<<"failure"<<endl;
+                continue;
+            }
+            int f=0;
+            for(auto it: u)
+            {
+                if(m[make_pair(date,it)].size()==0)
+                {
+                    for(int i=0;i<1440;i++)
+                    {
+                        m[make_pair(date,it)].push_back(0);
+                    }
+                }
+                else
+                {
+                    for(int i=l;i<(l+r);i++)
+                    {
+                        if(m[make_pair(date,it)][i]==1)
+                        {
+                            f=1;
+                            break;
+                        }
+                    }
+                }
+                if(f==1)
+                    break;
+            }
+            if(f)
+            {
+                cout<<"failure"<<endl;
+            }
+            else
+            {
+                for(auto it: u)
+                {
+                    for(int i=l;i<(l+r);i++)
+                    {
+                        m[make_pair(date,it)][i]=1;
+                    }
+                }
+                cout<<"success"<<endl;
+            }
+        }
+        else if(s[0]=='sh')
+        {
+            int c=0;
+            string date="",user="";
+            for(int i=0;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                date+=s[i];
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                user+=s[i];
+            }
+            vector<pair,int,int>> p;
+            if(m[make_pair(date,user)].size()==0)
+            {
+                continue;
+            }
+            int last=0,temp=-1;
+            for(int i=0;i<1440;i++)
+            {
+                if(m[make_pair(date,user)][i]==1)
+                {
+                    if(temp==-1)
+                    {
+                        last=i;
+                        temp=1;
+                    }
+                    else
+                    {
+                        temp++;
+                    }
+                }
+                else if(temp>0)
+                {
+                    p.push_back(make_pair(last,temp));
+                    temp=-1;
+                }
+            }
+            if(temp>0)
+            {
+                p.push_back(make_pair(last,temp));
+            }
+            for(int i=0;i<p.size();i++)
+            {
+                set<string> u;
+                for(auto it: users)
+                {
+                    if(m[make_pair(date,it)][p[i].first]==1)
+                    {
+                        u.insert(it);
+                    }
+                }
+                cout<<p[i].first<<"-"<<p[i].first+p[i].second<<" ";
+                for(auto it: u)
+                {
+                    cout<<it<<" ";
+                }
+                cout<<endl;
+            }
+        }
+        else
+        {
+            int c=0;
+            string date="";
+            for(int i=0;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                date+=s[i];
+            }
+            int l=0,r=0,time=0,num=0;
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                l=l*10+(ch-48);
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                r=r*10+(ch-48);
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                time=time*10+(ch-48);
+            }
+            for(int i=c;i<x;i++)
+            {
+                if(s[i]==' ')
+                {
+                    c=i+1;
+                    break;
+                }
+                char ch=s[i];
+                num=num*10+(ch-48);
+            }
+            set<string> u;
+            while(num--)
+            {
+                string t="";
+                for(int i=c;i<x;i++)
+                {
+                    if(s[i]==' ')
+                    {
+                        c=i+1;
+                        break;
+                    }
+                    t+=s[i];
+                }
+                u.insert(t);
+            }
+            for(int i=l;(i+time)<=r;i++)
+            {
+                int f=0;
+                for(int j=i;j<(j+time);j++)
+                {
+                    for(auto it: u)
+                    {
+                        if(m[make_pair(date,it)][j]==1)
+                        {
+                            f=1;
+                            break;
+                        }
+                    }
+                    if(f==1)
+                        break;
+                }
+                if(f==0)
+                {
+                    cout<<i<<endl;
+                    break;
+                }
+            }
+        }
+    }
+    return 0;
 }
