@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+#define INF 1e18
+#define int long long
+
+using namespace std;
+
+vector<vector<int>> adj;
+map<int,int> mm;
+vector<int> level;
+
+void dfs(int c,int p){
+    level[c] = level[p] + 1;
+    for(auto x:adj[c]){
+        if(x==p) continue;
+        dfs(x,c);
+    }
+    if(level[c]%2==0){
+        mm[level[c]]++;
+    }
+}
+
+void solve(){
+    int n,r; cin>>n>>r; r--;
+    int m,k; cin>>m>>k;
+    adj = vector<vector<int>> (n);
+    for(int i=0;i<m;i++){
+        int t1,t2; cin>>t1>>t2;
+        t1--; t2--;
+        adj[t1].push_back(t2);
+        adj[t2].push_back(t1);
+    }
+    map<int,vector<int>> cal;
+    for(auto x:adj[r]){
+        map<int,int> temp;
+        level = vector<int>(n);
+        mm = temp;
+        dfs(x,r);
+        for(auto x:mm){
+            cal[x.first].push_back(x.second);
+        }
+    }
+    int ans = 0;
+    for(auto x:cal){
+        int sz = x.second.size();
+        for(int i=0;i<sz;i++){
+            for(int j=i+1;j<sz;j++){
+                ans += x.second[i]*x.second[j];
+            }
+        }
+    }
+    cout<<ans<<"\n";
+}
+
+int32_t main(){
+    int t = 1;
+    while(t--){
+        solve();
+    }
+    return 0;
+}
